@@ -30,12 +30,9 @@ default_facts = {
   facterversion: Facter.version
 }
 
-default_facts_path = File.expand_path(File.join(File.dirname(__FILE__), 'default_facts.yml'))
-default_module_facts_path = File.expand_path(File.join(File.dirname(__FILE__), 'default_module_facts.yml'))
-
-default_facts.merge!(YAML.safe_load_file(default_facts_path, permitted_classes: [Symbol])) if File.exist?(default_facts_path) && File.readable?(default_facts_path)
-
-default_facts.merge!(YAML.safe_load_file(default_module_facts_path, permitted_classes: [Symbol])) if File.exist?(default_module_facts_path) && File.readable?(default_module_facts_path)
+[File.join(__dir__, 'default_facts.yml'), File.join(__dir__, 'default_module_facts.yml')].each do |path|
+  default_facts.merge!(YAML.safe_load_file(path, permitted_classes: [Symbol])) if File.exist?(path)
+end
 
 RSpec.configure do |c|
   c.default_facts = default_facts
