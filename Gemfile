@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 puppet_version = ENV['PUPPET_GEM_VERSION'] || '~> 8.0'
 
+gem 'json', '>= 2.7', require: false
 gem 'puppet', puppet_version, require: false
 gem 'rake', require: false
 
