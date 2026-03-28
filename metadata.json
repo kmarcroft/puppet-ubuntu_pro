@@ -1,6 +1,6 @@
 {
   "name": "marckri-ubuntu_pro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Kristian Marcroft",
   "summary": "Manage Ubuntu Pro subscription attachment securely",
   "license": "Apache-2.0",

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-03-28
+
+### Fixed
+
+- Removed `eyaml_lookup_key` backend from module-level `hiera.yaml` — eYAML belongs in the control-repo hierarchy, not the module data layer
+- Fixed OS version check to use `$facts['os']['release']['full']` instead of `$facts['os']['release']['major']`, which is `undef` on Ubuntu
+- Fixed all RuboCop violations: `frozen_string_literal` comments, hash alignment, modifier `if` style, RSpec context wording, message spies pattern, redundant cop disables
+- Migrated `.rubocop.yml` from `require:` to `plugins:` for rubocop-performance and rubocop-rspec
+- Excluded `.eyaml` files from puppet-syntax hieradata validation in Rakefile
+
+### Changed
+
+- Moved `data/common.eyaml` to `examples/common.eyaml` (example template, not active module data)
+- Added `spec/classes/**/*.rb` and `spec/defines/**/*.rb` to `RSpec/DescribeClass` exclusions
+
 ## [1.0.0] - 2026-03-28
 
 ### Added
@@ -23,7 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI pipeline: lint, syntax, RuboCop, unit tests (Puppet 8 on Ruby 3.2/3.3), security checks
 - GitHub Actions release workflow with artifact upload
 - Pre-commit hooks for local development (puppet-lint, syntax, RuboCop, hardcoded token detection)
-- Module-level Hiera hierarchy with eYAML backend configuration
+- eYAML example template for secure token storage
 - RSpec unit tests for the main class, custom type, and provider
 
+[1.0.1]: https://github.com/kmarcroft/puppet-ubuntu_pro/releases/tag/v1.0.1
 [1.0.0]: https://github.com/kmarcroft/puppet-ubuntu_pro/releases/tag/v1.0.0
