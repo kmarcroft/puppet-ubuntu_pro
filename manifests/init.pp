@@ -43,7 +43,7 @@ class ubuntu_pro (
     fail("ubuntu_pro: This module only supports Ubuntu, not ${facts['os']['name']}")
   }
 
-  $os_major = Integer($facts['os']['release']['major'].split('.')[0])
+  $os_major = Integer($facts['os']['release']['full'].split('\.')[0])
   if $os_major < 22 {
     fail("ubuntu_pro: Requires Ubuntu 22.04 or later, got ${facts['os']['release']['full']}")
   }
