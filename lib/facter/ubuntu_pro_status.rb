@@ -18,8 +18,8 @@ Facter.add(:ubuntu_pro_status) do
         {
           'attached' => data['attached'] || false,
           'services' => (data['services'] || []).map { |s| { 'name' => s['name'], 'status' => s['status'] } },
-          'account'  => data.dig('account', 'name'),
-          'expires'  => data['expires']
+          'account' => data.dig('account', 'name'),
+          'expires' => data['expires']
         }
       rescue StandardError
         { 'attached' => false, 'services' => [], 'error' => 'failed to parse pro status' }

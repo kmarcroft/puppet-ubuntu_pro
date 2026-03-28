@@ -8,7 +8,7 @@ describe 'ubuntu_pro' do
       { 'operatingsystem' => 'Ubuntu', 'operatingsystemrelease' => ['22.04', '24.04'] }
     ]
   ).each do |os, os_facts|
-    context "on #{os}" do
+    context "when on #{os}" do
       let(:facts) { os_facts }
       let(:params) do
         {

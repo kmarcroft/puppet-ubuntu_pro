@@ -42,6 +42,8 @@ Naming/PredicatePrefix:
 RSpec/DescribeClass:
   Exclude:
     - 'spec/unit/**/*.rb'
+    - 'spec/classes/**/*.rb'
+    - 'spec/defines/**/*.rb'
 
 RSpec/ExampleLength:
   Max: 10
