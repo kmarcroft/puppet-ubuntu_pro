@@ -9,6 +9,7 @@ group :development do
   gem 'pdk', '~> 3.0', require: false
   gem 'puppet-lint', '>= 4.0', require: false
   gem 'puppet-lint-unquoted_string-check', require: false
+  gem 'puppet-modulebuilder', '>= 1.0', require: false
   gem 'puppet-syntax', '>= 4.0', require: false
   gem 'rubocop', '>= 1.50', require: false
   gem 'rubocop-performance', require: false

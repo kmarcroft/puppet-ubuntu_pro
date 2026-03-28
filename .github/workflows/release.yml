@@ -28,7 +28,7 @@ jobs:
         run: bundle exec rake spec
 
       - name: Build module package
-        run: bundle exec puppet module build
+        run: bundle exec build-puppet-module
 
       - name: Upload release artifact
         uses: actions/upload-artifact@v5
