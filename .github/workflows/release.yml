@@ -28,7 +28,13 @@ jobs:
         run: bundle exec rake spec
 
       - name: Build module package
-        run: bundle exec build-puppet-module
+        run: |
+          bundle exec ruby -e "
+            require 'puppet/modulebuilder'
+            builder = Puppet::Modulebuilder::Builder.new(Dir.pwd, nil, nil)
+            tarball = builder.build
+            puts \"Built: #{tarball}\"
+          "
 
       - name: Upload release artifact
         uses: actions/upload-artifact@v5
