@@ -1,0 +1,15 @@
+# eYAML-encrypted Hiera data for ubuntu_pro module
+#
+# IMPORTANT: This file stores the Ubuntu Pro token encrypted with eYAML.
+# It is safe to commit to version control because the value is encrypted.
+#
+# To encrypt your token, run:
+#   eyaml encrypt -s 'YOUR_UBUNTU_PRO_TOKEN'
+#
+# Then replace the value below with the output.
+#
+# Example (this is NOT a real token):
+ubuntu_pro::token: >
+    ENC[PKCS7,MIIBygYJKoZIhvcNAQcDoIIBuzCCAbcCAQAxggEhMIIBHQIBADAFMAACAQEw
+    DQYJKoZIhvcNAQEBBQAEggEAREPLACE_WITH_YOUR_ENCRYPTED_TOKEN_OUTPUT
+    FROM_EYAML_ENCRYPT_COMMAND...]

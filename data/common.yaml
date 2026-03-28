@@ -1,0 +1,11 @@
+# Hiera common data for ubuntu_pro module
+#
+# The token MUST be stored in an eYAML-encrypted file (see common.eyaml).
+# This file only contains non-sensitive defaults.
+
+ubuntu_pro::ensure: 'attached'
+ubuntu_pro::manage_package: true
+ubuntu_pro::package_name: 'ubuntu-pro-client'
+ubuntu_pro::enable_services:
+  - 'esm-infra'
+ubuntu_pro::disable_services: []

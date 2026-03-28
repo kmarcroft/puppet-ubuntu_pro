@@ -1,0 +1,14 @@
+---
+os:
+  name: 'Ubuntu'
+  family: 'Debian'
+  release:
+    major: '24'
+    minor: '04'
+    full: '24.04'
+  distro:
+    codename: 'noble'
+networking:
+  fqdn: 'test.example.com'
+  hostname: 'test'
+  domain: 'example.com'

@@ -1,0 +1,49 @@
+# Pre-commit hooks for local development
+# Install: pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: ['--allow-multiple-documents']
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: puppet-lint
+        name: puppet-lint
+        entry: bundle exec puppet-lint
+        language: system
+        files: '\.pp$'
+        pass_filenames: true
+
+      - id: puppet-syntax
+        name: puppet-syntax
+        entry: bundle exec rake syntax
+        language: system
+        pass_filenames: false
+        files: '\.(pp|epp)$'
+
+      - id: rubocop
+        name: rubocop
+        entry: bundle exec rubocop
+        language: system
+        files: '\.rb$'
+        pass_filenames: true
+
+      - id: no-hardcoded-tokens
+        name: Check for hardcoded tokens
+        entry: bash -c 'if grep -rPn "C[A-Za-z0-9]{28,}" --include="*.pp" --include="*.yaml" --include="*.rb" --exclude-dir=spec --exclude-dir=vendor .; then echo "Possible hardcoded token!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+
+      - id: metadata-json
+        name: Validate metadata.json
+        entry: ruby -e "require 'json'; JSON.parse(File.read('metadata.json'))"
+        language: system
+        files: 'metadata\.json$'
+        pass_filenames: false
