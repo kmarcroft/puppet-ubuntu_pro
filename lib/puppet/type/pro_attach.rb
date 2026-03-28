@@ -57,9 +57,7 @@ Puppet::Type.newtype(:pro_attach) do
             else
               value
             end
-      if raw.nil? || raw.empty?
-        raise Puppet::Error, 'token must not be empty'
-      end
+      raise Puppet::Error, 'token must not be empty' if raw.nil? || raw.empty?
     end
   end
 end
