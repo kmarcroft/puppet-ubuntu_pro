@@ -1,0 +1,42 @@
+---
+require:
+  - rubocop-performance
+  - rubocop-rspec
+
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 3.2
+  NewCops: enable
+  Include:
+    - 'lib/**/*.rb'
+    - 'spec/**/*.rb'
+  Exclude:
+    - 'bin/*'
+    - 'pkg/**/*'
+    - 'spec/fixtures/**/*'
+    - 'vendor/**/*'
+
+# Puppet provider/type files tend to be longer
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'lib/puppet/type/**/*.rb'
+
+Metrics/MethodLength:
+  Max: 20
+
+# Puppet DSL style
+Style/Documentation:
+  Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+RSpec/ExampleLength:
+  Max: 10
+
+RSpec/MultipleExpectations:
+  Max: 3
+
+RSpec/NestedGroups:
+  Max: 4

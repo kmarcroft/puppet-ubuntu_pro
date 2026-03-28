@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: "Puppet Validate & Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Run puppet-lint
+        run: bundle exec rake lint
+
+      - name: Run puppet syntax check
+        run: bundle exec rake syntax
+
+      - name: Validate metadata.json
+        run: bundle exec ruby -e "require 'json'; JSON.parse(File.read('metadata.json'))"
+
+  rubocop:
+    name: "RuboCop"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rake rubocop
+
+  unit-tests:
+    name: "Unit Tests (Puppet ${{ matrix.puppet_version }} / Ruby ${{ matrix.ruby_version }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - puppet_version: '~> 8.0'
+            ruby_version: '3.2'
+          - puppet_version: '~> 8.0'
+            ruby_version: '3.3'
+    env:
+      PUPPET_GEM_VERSION: ${{ matrix.puppet_version }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Ruby ${{ matrix.ruby_version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby_version }}
+          bundler-cache: true
+
+      - name: Run unit tests
+        run: bundle exec rake spec
+
+  security-check:
+    name: "Security Checks"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Ensure token is never hardcoded
+        run: |
+          echo "Checking for hardcoded tokens in manifests and data..."
+          if grep -rPn 'C[A-Za-z0-9]{28,}' --include='*.pp' --include='*.yaml' --include='*.rb' \
+             --exclude-dir=spec --exclude-dir=vendor .; then
+            echo "ERROR: Possible hardcoded Ubuntu Pro token found!"
+            exit 1
+          fi
+          echo "No hardcoded tokens found."
+
+      - name: Ensure Sensitive type is enforced
+        run: |
+          echo "Verifying token parameter uses Sensitive type..."
+          grep -q 'Sensitive\[String' manifests/init.pp || {
+            echo "ERROR: Token parameter must use Sensitive[String] type"
+            exit 1
+          }
+          echo "Sensitive type enforcement verified."

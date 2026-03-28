@@ -1,6 +1,20 @@
 # ubuntu_pro
 
+[![CI](https://github.com/kmarcroft/puppet-ubuntu_pro/actions/workflows/ci.yml/badge.svg)](https://github.com/kmarcroft/puppet-ubuntu_pro/actions/workflows/ci.yml)
+[![Apache-2.0 License](https://img.shields.io/github/license/kmarcroft/puppet-ubuntu_pro)](LICENSE)
+
 Manage Ubuntu Pro subscription attachment securely via Puppet.
+
+## Table of Contents
+
+- [Security Architecture](#security-architecture)
+- [Requirements](#requirements)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+- [Reference](#reference)
+- [Hiera eYAML Setup](#hiera-eyaml-setup)
+- [Limitations](#limitations)
+- [Development](#development)
 
 ## Security Architecture
 
@@ -15,11 +29,15 @@ This module is designed with a **zero-exposure guarantee** for the Ubuntu Pro su
 | **Filesystem** | Token is **never written to disk** on the managed node — no temp files, no config files |
 | **Error output** | Any error messages from `pro` are scrubbed to replace the token with `[REDACTED]` before raising |
 
-## Setup Requirements
+## Requirements
 
-1. **eYAML** configured on your Puppet Server ([setup guide](https://github.com/voxpupuli/hiera-eyaml))
-2. **Ubuntu Pro client** (`ubuntu-advantage-tools`) — the module installs it by default
-3. A valid **Ubuntu Pro subscription token** from <https://ubuntu.com/pro/dashboard>
+| Component | Version |
+|-----------|---------|
+| Puppet / OpenVox | 8.x |
+| Ruby | >= 3.2 |
+| puppetlabs/stdlib | >= 9.0.0 |
+| hiera-eyaml | >= 3.0.0 (gem on Puppet Server) |
+| Ubuntu | 22.04 (Jammy), 24.04 (Noble) |
 
 ## Quick Start
 
@@ -92,8 +110,8 @@ ubuntu_pro::token: >
 |-----------|------|---------|-------------|
 | `token` | `Sensitive[String[1]]` | *required* | Ubuntu Pro token (eYAML encrypted) |
 | `ensure` | `Enum['attached','detached']` | `attached` | Desired state |
-| `manage_package` | `Boolean` | `true` | Whether to manage `ubuntu-advantage-tools` |
-| `package_name` | `String[1]` | `ubuntu-advantage-tools` | Package name |
+| `manage_package` | `Boolean` | `true` | Whether to manage `ubuntu-pro-client` |
+| `package_name` | `String[1]` | `ubuntu-pro-client` | Package name |
 | `enable_services` | `Array[String[1]]` | `[]` | Services to enable after attach |
 | `disable_services` | `Array[String[1]]` | `[]` | Services to explicitly disable |
 
@@ -122,6 +140,8 @@ Reports attachment status and enabled services. **Never contains the token.**
   "expires": "2027-01-01T00:00:00Z"
 }
 ```
+
+See [REFERENCE.md](REFERENCE.md) for full type and provider documentation.
 
 ## Hiera eYAML Setup
 
@@ -165,15 +185,36 @@ hierarchy:
 
 ## Limitations
 
-- Ubuntu only (20.04, 22.04, 24.04)
-- Requires Puppet 7+ or 8+
-- The `pro` CLI must be available on the target system
+- **Ubuntu only** — 22.04 (Jammy) and 24.04 (Noble); future Ubuntu releases are supported automatically via version check (`>= 22`)
+- **Puppet 8.x / OpenVox 8.x** — requires Ruby 3.2+
+- The `pro` CLI must be available on the target system (installed automatically via `ubuntu-pro-client` package)
 
 ## Development
 
 ```bash
 bundle install
-bundle exec rake spec      # Run unit tests
-bundle exec rake lint       # Puppet lint
-bundle exec rake validate   # Full validation
+bundle exec rake spec       # Run unit tests
+bundle exec rake lint        # Puppet lint
+bundle exec rake rubocop     # Ruby style checks
+bundle exec rake checks      # All checks (lint, syntax, spec, rubocop)
 ```
+
+### Pre-commit hooks
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+### CI
+
+This module uses GitHub Actions for continuous integration. On every push and PR to `main`, the pipeline runs:
+
+- Puppet lint and syntax validation
+- RuboCop style checks
+- Unit tests across Puppet 8 on Ruby 3.2 and 3.3
+- Security checks (hardcoded token detection, Sensitive type enforcement)
+
+## License
+
+This module is licensed under the [Apache License, Version 2.0](LICENSE).

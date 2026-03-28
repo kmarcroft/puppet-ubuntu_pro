@@ -1,0 +1,7 @@
+---
+# PDK sync configuration
+# Customizations to override PDK template defaults
+spec/spec_helper.rb:
+  unmanaged: true
+.rubocop.yml:
+  unmanaged: true
