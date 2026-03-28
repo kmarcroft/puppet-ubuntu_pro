@@ -9,6 +9,7 @@ PuppetLint.configuration.ignore_paths = ['spec/**/*.pp', 'vendor/**/*.pp', 'pkg/
 
 PuppetSyntax.check_hiera_keys = true
 PuppetSyntax.exclude_paths = ['spec/fixtures/**/*', 'pkg/**/*', 'vendor/**/*']
+PuppetSyntax.hieradata_paths = ['data/**/*.yaml']
 
 desc 'Validate manifests, templates, and ruby files'
 task validate: %i[lint syntax spec]
