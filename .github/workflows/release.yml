@@ -35,3 +35,12 @@ jobs:
         with:
           name: puppet-module
           path: pkg/*.tar.gz
+
+      # TODO: Uncomment when ready to publish to Puppet Forge
+      # - name: Publish to Puppet Forge
+      #   env:
+      #     FORGE_API_KEY: ${{ secrets.FORGE_API_KEY }}
+      #   run: |
+      #     bundle exec puppet module push pkg/marckri-ubuntu_pro-*.tar.gz \
+      #       --module_group=marckri \
+      #       --render-as=json

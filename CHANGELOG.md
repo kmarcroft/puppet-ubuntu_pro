@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-03-28
+
+### Fixed
+
+- Pinned `json` and `json_pure` gems to `>= 2.7` to fix `JSON::Fragment` `NameError` on Ruby 3.2
+- Replaced `puppet module build` with `build-puppet-module` in release workflow (command removed in Puppet 8)
+- Added `puppet-modulebuilder` gem to Gemfile for CI builds
+
 ## [1.0.1] - 2026-03-28
 
 ### Fixed
@@ -41,5 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - eYAML example template for secure token storage
 - RSpec unit tests for the main class, custom type, and provider
 
+[1.0.2]: https://github.com/kmarcroft/puppet-ubuntu_pro/releases/tag/v1.0.2
 [1.0.1]: https://github.com/kmarcroft/puppet-ubuntu_pro/releases/tag/v1.0.1
 [1.0.0]: https://github.com/kmarcroft/puppet-ubuntu_pro/releases/tag/v1.0.0
