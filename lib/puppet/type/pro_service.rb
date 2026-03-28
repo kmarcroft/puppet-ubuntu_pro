@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:pro_service) do
   @doc = <<-DOC
     @summary Manages individual Ubuntu Pro services (esm-infra, livepatch, etc.)

@@ -21,6 +21,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
     - 'lib/puppet/type/**/*.rb'
+    - 'lib/puppet/provider/**/*.rb'
 
 Metrics/MethodLength:
   Max: 20
@@ -32,6 +33,16 @@ Style/Documentation:
 Style/SymbolArray:
   EnforcedStyle: brackets
 
+# Puppet type/provider API requires these method names
+Naming/PredicatePrefix:
+  Exclude:
+    - 'lib/puppet/type/**/*.rb'
+
+# Puppet types use top-level DSL blocks, not classes
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/unit/**/*.rb'
+
 RSpec/ExampleLength:
   Max: 10
 
@@ -40,3 +51,8 @@ RSpec/MultipleExpectations:
 
 RSpec/NestedGroups:
   Max: 4
+
+# Spec files commonly use top-level include for RspecPuppetFacts
+Style/MixinUsage:
+  Exclude:
+    - 'spec/spec_helper.rb'

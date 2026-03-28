@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:pro_attach) do
   @doc = <<-DOC
     @summary Manages Ubuntu Pro subscription attachment.

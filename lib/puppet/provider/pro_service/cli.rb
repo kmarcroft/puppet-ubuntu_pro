@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 Puppet::Type.type(:pro_service).provide(:cli) do

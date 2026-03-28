@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:pro_attach) do
@@ -5,7 +7,7 @@ describe Puppet::Type.type(:pro_attach) do
     Puppet::Type.type(:pro_attach).new(
       name: 'test',
       token: 'test-token-value',
-      ensure: :attached,
+      ensure: :attached
     )
   end
 
@@ -31,8 +33,8 @@ describe Puppet::Type.type(:pro_attach) do
   end
 
   it 'rejects empty token' do
-    expect {
+    expect do
       Puppet::Type.type(:pro_attach).new(name: 'bad', token: '', ensure: :attached)
-    }.to raise_error(Puppet::Error, %r{must not be empty})
+    end.to raise_error(Puppet::Error, /must not be empty/)
   end
 end

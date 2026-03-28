@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'open3'
 
@@ -14,27 +16,27 @@ Puppet::Type.type(:pro_attach).provide(:cli) do
   end
 
   def attach
-    unless attached?
-      token_value = unwrap_token
-      # SECURITY: pass the token via stdin only.
-      # The command line only contains `pro attach --no-auto-enable -`
-      # which tells pro to read the token from stdin.
-      # This ensures the token never appears in /proc/<pid>/cmdline.
-      cmd = [command(:pro_cmd), 'attach', '--no-auto-enable', '-']
-      stdout, stderr, status = Open3.capture3(*cmd, stdin_data: token_value)
-      unless status.success?
-        # Scrub any accidental token leakage from error messages
-        safe_stderr = stderr.gsub(token_value, '[REDACTED]')
-        safe_stdout = stdout.gsub(token_value, '[REDACTED]')
-        raise Puppet::Error, "pro attach failed (exit #{status.exitstatus}): #{safe_stderr} #{safe_stdout}"
-      end
-    end
+    return if attached?
+
+    token_value = unwrap_token
+    # SECURITY: pass the token via stdin only.
+    # The command line only contains `pro attach --no-auto-enable -`
+    # which tells pro to read the token from stdin.
+    # This ensures the token never appears in /proc/<pid>/cmdline.
+    cmd = [command(:pro_cmd), 'attach', '--no-auto-enable', '-']
+    stdout, stderr, status = Open3.capture3(*cmd, stdin_data: token_value)
+    return if status.success?
+
+    # Scrub any accidental token leakage from error messages
+    safe_stderr = stderr.gsub(token_value, '[REDACTED]')
+    safe_stdout = stdout.gsub(token_value, '[REDACTED]')
+    raise Puppet::Error, "pro attach failed (exit #{status.exitstatus}): #{safe_stderr} #{safe_stdout}"
   end
 
   def detach
-    if attached?
-      execute([command(:pro_cmd), 'detach', '--assume-yes'])
-    end
+    return unless attached?
+
+    execute([command(:pro_cmd), 'detach', '--assume-yes'])
   end
 
   private
