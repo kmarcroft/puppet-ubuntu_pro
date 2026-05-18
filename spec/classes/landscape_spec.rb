@@ -34,10 +34,18 @@ describe 'ubuntu_pro::landscape' do
 
       context 'when ensure is registered without registration key' do
         let(:params) do
-          super().merge(registration_key: nil)
+          super().tap { |p| p.delete(:registration_key) }
         end
 
         it { is_expected.to compile.and_raise_error(/registration_key is required/) }
+      end
+
+      context 'when ensure is registered without account name' do
+        let(:params) do
+          super().tap { |p| p.delete(:account_name) }
+        end
+
+        it { is_expected.to compile.and_raise_error(/account_name is required/) }
       end
     end
   end
