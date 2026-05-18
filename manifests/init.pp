@@ -30,6 +30,33 @@
 # @param disable_services
 #   Optional list of Ubuntu Pro services to explicitly disable.
 #
+# @param manage_landscape
+#   Whether to manage Landscape client registration.
+#
+# @param landscape_ensure
+#   Whether Landscape client should be registered or disabled.
+#
+# @param landscape_registration_key
+#   Landscape registration key (store in eYAML as Sensitive data).
+#
+# @param landscape_account_name
+#   Landscape account name for client registration.
+#
+# @param landscape_computer_title
+#   Optional Landscape computer title (defaults to certname).
+#
+# @param landscape_tags
+#   Optional list of Landscape tags.
+#
+# @param landscape_url
+#   Landscape message-system URL.
+#
+# @param landscape_ping_url
+#   Landscape ping URL.
+#
+# @param landscape_ssl_public_key
+#   Optional CA certificate path for Landscape SSL verification.
+#
 class ubuntu_pro (
   Sensitive[String[1]] $token,
   Enum['attached', 'detached'] $ensure           = 'attached',
@@ -37,6 +64,15 @@ class ubuntu_pro (
   String[1]                    $package_name     = 'ubuntu-pro-client',
   Array[String[1]]             $enable_services  = [],
   Array[String[1]]             $disable_services = [],
+  Boolean                      $manage_landscape = false,
+  Enum['registered', 'disabled'] $landscape_ensure = 'registered',
+  Optional[Sensitive[String[1]]] $landscape_registration_key = undef,
+  Optional[String[1]]            $landscape_account_name     = undef,
+  Optional[String[1]]            $landscape_computer_title   = undef,
+  Array[String[1]]               $landscape_tags             = [],
+  String[1]                      $landscape_url              = 'https://landscape.canonical.com/message-system',
+  String[1]                      $landscape_ping_url         = 'http://landscape.canonical.com/ping',
+  Optional[String[1]]            $landscape_ssl_public_key   = undef,
 ) {
   # Only supported on Ubuntu 22.04+
   unless $facts['os']['name'] == 'Ubuntu' {
@@ -72,6 +108,28 @@ class ubuntu_pro (
     pro_service { $service:
       ensure  => 'disabled',
       require => Pro_attach['ubuntu_pro'],
+    }
+  }
+
+  if $manage_landscape {
+    if $landscape_ensure == 'registered' {
+      if $landscape_registration_key == undef {
+        fail('ubuntu_pro: landscape_registration_key is required when manage_landscape=true and landscape_ensure=registered')
+      }
+      if $landscape_account_name == undef {
+        fail('ubuntu_pro: landscape_account_name is required when manage_landscape=true and landscape_ensure=registered')
+      }
+    }
+
+    class { 'ubuntu_pro::landscape':
+      ensure           => $landscape_ensure,
+      registration_key => $landscape_registration_key,
+      account_name     => $landscape_account_name,
+      computer_title   => $landscape_computer_title,
+      tags             => $landscape_tags,
+      url              => $landscape_url,
+      ping_url         => $landscape_ping_url,
+      ssl_public_key   => $landscape_ssl_public_key,
     }
   }
 }

@@ -53,6 +53,26 @@ describe 'ubuntu_pro' do
 
         it { is_expected.to contain_pro_service('fips').with_ensure('disabled') }
       end
+
+      context 'when landscape management is enabled' do
+        let(:params) do
+          super().merge(
+            manage_landscape: true,
+            landscape_account_name: 'standalone',
+            landscape_registration_key: sensitive('landscape-secret')
+          )
+        end
+
+        it { is_expected.to contain_class('ubuntu_pro::landscape') }
+      end
+
+      context 'when landscape is enabled without required parameters' do
+        let(:params) do
+          super().merge(manage_landscape: true)
+        end
+
+        it { is_expected.to compile.and_raise_error(/landscape_registration_key is required/) }
+      end
     end
   end
 

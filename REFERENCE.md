@@ -4,6 +4,7 @@
 
 - [Classes](#classes)
   - [ubuntu_pro](#ubuntu_pro)
+  - [ubuntu_pro::landscape](#ubuntu_prolandscape)
 - [Resource Types](#resource-types)
   - [pro_attach](#pro_attach)
   - [pro_service](#pro_service)
@@ -26,6 +27,34 @@ Manages Ubuntu Pro subscription attachment. Compatible with Puppet 8.x and OpenV
 | `package_name` | `String[1]` | `'ubuntu-pro-client'` | Name of the Ubuntu Pro client package. |
 | `enable_services` | `Array[String[1]]` | `[]` | List of Ubuntu Pro services to enable after attaching (e.g. `esm-infra`, `esm-apps`, `livepatch`). |
 | `disable_services` | `Array[String[1]]` | `[]` | List of Ubuntu Pro services to explicitly disable. |
+| `manage_landscape` | `Boolean` | `false` | Whether to manage Landscape client registration. |
+| `landscape_ensure` | `Enum['registered', 'disabled']` | `'registered'` | Landscape desired state when `manage_landscape` is enabled. |
+| `landscape_registration_key` | `Optional[Sensitive[String[1]]]` | `undef` | Landscape registration key (from eYAML). Required for registration. |
+| `landscape_account_name` | `Optional[String[1]]` | `undef` | Landscape account name. Required for registration. |
+| `landscape_computer_title` | `Optional[String[1]]` | `undef` | Optional custom computer title for Landscape. |
+| `landscape_tags` | `Array[String[1]]` | `[]` | Optional Landscape tags. |
+| `landscape_url` | `String[1]` | `'https://landscape.canonical.com/message-system'` | Landscape message-system URL. |
+| `landscape_ping_url` | `String[1]` | `'http://landscape.canonical.com/ping'` | Landscape ping URL. |
+| `landscape_ssl_public_key` | `Optional[String[1]]` | `undef` | Optional CA certificate path for SSL verification. |
+
+### `ubuntu_pro::landscape`
+
+Manages Landscape client configuration and registration using `/etc/landscape/client.conf`.
+
+#### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `ensure` | `Enum['registered', 'disabled']` | `'registered'` | Whether Landscape client should be registered or disabled. |
+| `registration_key` | `Optional[Sensitive[String[1]]]` | `undef` | Registration key; required when `ensure = 'registered'`. |
+| `account_name` | `Optional[String[1]]` | `undef` | Landscape account name; required when `ensure = 'registered'`. |
+| `computer_title` | `Optional[String[1]]` | `undef` | Optional client title (defaults to certname). |
+| `tags` | `Array[String[1]]` | `[]` | Optional tags sent on registration. |
+| `url` | `String[1]` | `'https://landscape.canonical.com/message-system'` | Landscape message-system URL. |
+| `ping_url` | `String[1]` | `'http://landscape.canonical.com/ping'` | Landscape ping URL. |
+| `ssl_public_key` | `Optional[String[1]]` | `undef` | Optional CA certificate path. |
+| `manage_package` | `Boolean` | `true` | Whether to manage the `landscape-client` package. |
+| `package_name` | `String[1]` | `'landscape-client'` | Landscape package name. |
 
 ## Resource Types
 

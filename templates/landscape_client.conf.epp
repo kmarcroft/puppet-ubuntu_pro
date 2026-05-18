@@ -1,0 +1,12 @@
+[client]
+url = <%= $url %>
+ping_url = <%= $ping_url %>
+account_name = <%= $account_name %>
+registration_key = <%= $registration_key %>
+computer_title = <%= $computer_title %>
+<% if !$tags.empty { -%>
+tags = <%= $tags.join(',') %>
+<% } -%>
+<% if $ssl_public_key != undef { -%>
+ssl_public_key = <%= $ssl_public_key %>
+<% } -%>

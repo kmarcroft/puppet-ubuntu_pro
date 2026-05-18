@@ -102,6 +102,21 @@ ubuntu_pro::token: >
     ENC[PKCS7,...]
 ```
 
+### Manage Landscape registration
+
+```yaml
+# data/common.eyaml
+ubuntu_pro::landscape_registration_key: >
+    ENC[PKCS7,...]
+
+# data/common.yaml
+ubuntu_pro::manage_landscape: true
+ubuntu_pro::landscape_account_name: 'standalone'
+ubuntu_pro::landscape_tags:
+  - 'production'
+  - 'ubuntu'
+```
+
 ## Reference
 
 ### Class: `ubuntu_pro`
@@ -114,6 +129,15 @@ ubuntu_pro::token: >
 | `package_name` | `String[1]` | `ubuntu-pro-client` | Package name |
 | `enable_services` | `Array[String[1]]` | `[]` | Services to enable after attach |
 | `disable_services` | `Array[String[1]]` | `[]` | Services to explicitly disable |
+| `manage_landscape` | `Boolean` | `false` | Whether to manage Landscape client registration |
+| `landscape_ensure` | `Enum['registered','disabled']` | `registered` | Landscape client target state |
+| `landscape_registration_key` | `Optional[Sensitive[String[1]]]` | `undef` | Landscape registration key (eYAML encrypted) |
+| `landscape_account_name` | `Optional[String[1]]` | `undef` | Landscape account name |
+| `landscape_computer_title` | `Optional[String[1]]` | `undef` | Optional Landscape computer title |
+| `landscape_tags` | `Array[String[1]]` | `[]` | Optional Landscape tags |
+| `landscape_url` | `String[1]` | `https://landscape.canonical.com/message-system` | Landscape message URL |
+| `landscape_ping_url` | `String[1]` | `http://landscape.canonical.com/ping` | Landscape ping URL |
+| `landscape_ssl_public_key` | `Optional[String[1]]` | `undef` | Optional CA certificate path |
 
 ### Custom Types
 
